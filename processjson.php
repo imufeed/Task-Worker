@@ -15,6 +15,8 @@
 	$arr_data = json_decode($jsondata, true);
 	
 	var_dump($arr_data);
+	
+	
 	echo $arr_data->commands . "\n";
 	
 	

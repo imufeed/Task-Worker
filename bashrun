@@ -1,0 +1,65 @@
+#!/bin/bash
+
+# Bash script to execute your task
+
+echo "Hello world!"
+
+
+folder=$2
+echo "$folder"
+echo "after where"
+
+url=$3
+echo "$url"
+echo "after url"
+
+task=$4
+echo "$task"
+echo "after task"
+
+#print number of parameters
+echo "$#"
+
+#declear an array to hold values
+declare -a commandsArray
+
+#put values inside the array
+commandsArray=("$@")
+
+# get length of an array
+tLen=${#commandsArray[@]}
+ 
+# use for loop read all nameservers
+for (( i=0; i<${tLen}; i++ ));
+do
+  ${commandsArray[$i]}
+done
+
+chmod 777 /var/www/html/worker/uploads/$folder
+cd /var/www/html/worker/uploads/$folder
+
+for (( i=0; i<${tLen}; i++ ));
+do
+  ${commandsArray[$i]}
+done
+
+//zip -r test.zip $folder
+zip $task.zip *
+
+scp $task.zip -P 5000 ibrahim@127.0.0.1:/home/ibrahim/Desktop/
+
+
+
+
+
+
+
+#print number of array elements
+#echo ${commandsArray[0]}
+
+#for arg in "${commandsArray[@]}"; do
+	#$arg
+#done
+
+
+

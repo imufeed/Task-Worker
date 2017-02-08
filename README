@@ -1,0 +1,1 @@
+This is a project that allow user to specify a task that he want to run on the server. The server will upload the files and execute a bash script that will run all user commands. and finally should send back the result to the user.

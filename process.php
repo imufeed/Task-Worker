@@ -13,10 +13,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
         if (strlen($_FILES['files']['name'][$i]) > 1) {			
 			$target_file = $new_dir ."/". basename($_FILES["files"]["name"][$i]);
 			echo("<br/>");
-			echo($target_file);
+			//echo($target_file);
+			echo $_FILES["files"]["tmp_name"][$i];
             if (move_uploaded_file($_FILES["files"]["tmp_name"][$i], $target_file)) {
                 $count++;
-                echo ("new");
+              //  echo ("new");
             }
         }
     }
@@ -24,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
     if (empty($_POST["commands"])) {
 		$commands = "";		
 		} else {			
-			$commands = escapeshellarg($_POST["commands"]);
+			$commands = escapeshellarg($_POST["commands"]);			
 			$commands = explode("\n", str_replace("\r", "", $commands));
 		}
 		array_push($commands, $dirname);
@@ -50,8 +51,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 }
 
 $where = "uploads";
-
-echo("<br/>testing<br/>");
 
 
 $result = shell_exec('/var/www/html/worker/bashrun '.join(' ',$commands));

@@ -1,6 +1,6 @@
 {
-  "name": "testjob",
-  "commands": ["python work_task.py", "la /var"],
-  "files_in": ["work_task.py"],    
+  "task_name": "test job",
+  "commands": ["python work_task.py", "ls /var"],
+  "files_in": ["work_task.py", "test.ps"],    
   "user_url": "http://127.0.0.1:5000"
 }

@@ -59,10 +59,8 @@ $result = shell_exec('/var/www/html/worker/bashrun '.join(' ',$commands));
 echo "<pre>$output</pre>";
 print_r($result); 
 
-//http://stackoverflow.com/questions/32721216/how-to-pass-a-php-array-to-a-bash-script
+echo "your job id is: ".$dirname;
 
-
-//header('Location: http://localhost/index.php?success=true');
 
 // Function that check the data entered by the user.
 function test_input($data) {

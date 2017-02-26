@@ -43,11 +43,13 @@ do
   ${commandsArray[$i]}
 done
 
-//zip -r test.zip $folder
+#zip -r test.zip $folder
 zip $task.zip *
 
-scp $task.zip -P 5000 ibrahim@127.0.0.1:/home/ibrahim/Desktop/
+cp $task.zip ../../finished
 
+#scp $task.zip -P 5000 ibrahim@127.0.0.1:/home/ibrahim/Desktop/
+//echo "Your task $task with id: $folder is finished" | mail -s "Worker: $task Task finished" $url
 
 
 

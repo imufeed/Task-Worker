@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Worker</title>
+  <title>Worker: Results</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -161,33 +161,26 @@
       <h1>Welcome to Worker</h1>
       <p>Using this webpage you will be able to run your simulation on the server and get the results back to your machine. You can fill the form below or upload a JSON file that contains the details of your task.</p>
       <hr>
-      <h2>Task information</h2>
-      <p>Fill the following form with the details of your task</p>      
+      <h2>List of finished work</h2>
+      <p>Here you find a list of all the completed work in zip format. You can download it or delete it.</p>      
         
-        <form action="process.php" method="POST" enctype="multipart/form-data">
-			<label for="taskname">Task name</label> <input type="text" name="taskname" required="required" id="taskname" class="form-control" /> <br/>
-			<label for="userurl">Email address</label> <input type="text" name="userurl" id="userurl" required="required" class="form-control" /> <br/>
-			<label for="commands">Commands</label> <textarea name="commands" id="commands" required="required" class="form-control" rows="5"></textarea> <br/>
-			<label for="files"> Input directory </label> <input type="file" name="files[]" id="files" multiple="" directory="" webkitdirectory="" mozdirectory="" class="form-control" /> <br/>
-			Output directory:<input type="file" webkitdirectory directory multiple class="form-control" /> <br/>
-			<!--<input type="file" id="flup" onchange="getfolder(event)" webkitdirectory mozdirectory msdirectory odirectory directory multiple />!-->          
-					
+        
+    
+    
+    <?php
+		$dir    = 'finished';
+		$files = scandir($dir);
+		$files = array_diff($files, array('.', '..'));
 
-           <input type="submit" value="Submit Task" class="btn btn-info" />
-        </form>
-        
-        <hr>
-        <h2>Using JSON file</h2>
-        
-        <form action="processjson.php" method="POST">
-			<label for="jsonfile"> Select JSON file </label><input type="file" name="jsonfile" id="jsonfile"/><br/>
-        
-        <input type="submit" value="Submit JSON" class="btn btn-info" />
-        
-        </form>
+		foreach($files as $file) {
+			$link_address = 'finished/'.$file;
+			echo "<li><a href='".$link_address."'>Link</a></li>";
+			//echo "<a href=getcwd().'/finished/'.$file>link</a>";
+		}
+		//print_r($files);
+
+		?>
     </div>
-    
-    
     <div class="col-sm-2 sidenav">
       <div class="well">
         <p>ADS</p>

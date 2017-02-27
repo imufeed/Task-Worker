@@ -49,7 +49,16 @@ zip $task.zip *
 cp $task.zip ../../finished
 
 #scp $task.zip -P 5000 ibrahim@127.0.0.1:/home/ibrahim/Desktop/
-//echo "Your task $task with id: $folder is finished" | mail -s "Worker: $task Task finished" $url
+
+TO_ADDRESS=$3
+FROM_ADDRESS="work@worker.de"
+SUBJECT="Worker: $task Task finished"
+BODY="Your task $task with id: $folder is finished"
+
+echo "${BODY}" | mail -s "${SUBJECT}" "${TO_ADDRESS}"  # -- -r "${FROM_ADDRESS}"
+
+
+#echo "Your task $task with id: $folder is finished" | mail -s "Worker: $task Task finished" $url
 
 
 

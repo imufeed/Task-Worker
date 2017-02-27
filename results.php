@@ -138,9 +138,9 @@
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="#">Home</a></li>
+        <li><a href="index.php">Home</a></li>
         <li><a href="#">About</a></li>
-        <li><a href="#">Projects</a></li>
+        <li class="active"><a href="results.php">Results</a></li>
         <li><a href="#">Contact</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -158,7 +158,7 @@
       <p><a href="#">Link</a></p>
     </div>
     <div class="col-sm-8 text-left"> 
-      <h1>Welcome to Worker</h1>
+      <h1>Results</h1>
       <p>Using this webpage you will be able to run your simulation on the server and get the results back to your machine. You can fill the form below or upload a JSON file that contains the details of your task.</p>
       <hr>
       <h2>List of finished work</h2>
@@ -172,14 +172,27 @@
 		$files = scandir($dir);
 		$files = array_diff($files, array('.', '..'));
 
+		echo "<table>";
 		foreach($files as $file) {
 			$link_address = 'finished/'.$file;
-			echo "<li><a href='".$link_address."'>Link</a></li>";
+			echo "<tr><td><a href='".$link_address."'>$file</a></td>";
+			echo "<td><a href='?delete=1'>Delete Now!</a></td></tr>";
+
+			$x = $_SERVER['DOCUMENT_ROOT']."/worker/finished/". $file ;
+			echo $x;
+			if(isset($_GET['delete'])) {
+			
+				unlink($x);			
+			}
+
 			//echo "<a href=getcwd().'/finished/'.$file>link</a>";
+			
+			
 		}
 		//print_r($files);
-
+		echo "</table>";
 		?>
+		
     </div>
     <div class="col-sm-2 sidenav">
       <div class="well">

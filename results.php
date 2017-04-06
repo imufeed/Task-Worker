@@ -162,35 +162,43 @@
       <p>Using this webpage you will be able to run your simulation on the server and get the results back to your machine. You can fill the form below or upload a JSON file that contains the details of your task.</p>
       <hr>
       <h2>List of finished work</h2>
-      <p>Here you find a list of all the completed work in zip format. You can download it or delete it.</p>      
+      <p>Here you can check the status of your task using task id. You can download it or delete it.</p>      
         
-        
+      <form action="results.php" method="POST" enctype="multipart/form-data">
+			<label for="taskid">Task id</label> <input type="text" name="taskid" required="required" id="taskid" class="form-control" /> <br/>
+           <input type="submit" value="Check Status" class="btn btn-info" /><br/><br/>
+      </form>
     
     
     <?php
-		$dir    = 'finished';
-		$files = scandir($dir);
-		$files = array_diff($files, array('.', '..'));
+		if ($_SERVER['REQUEST_METHOD'] == 'POST'){
+			if(empty($_POST["taskid"])) {
+				$id = "";
+			} else {
+				$id = $_POST["taskid"];
+				$dir    = 'finished';
+				$files = scandir($dir);
+				$files = array_diff($files, array('.', '..'));
+				echo "<table>";				
+				foreach($files as $file) {										
+					if($file == $id) {
+						$link_address = 'finished/'.$file;
+						echo "<tr><td><a href='".$link_address."'>$file</a></td>";						
+						echo "<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td><td><a href='?delete=1'>Delete Now!</a></td></tr>";
 
-		echo "<table>";
-		foreach($files as $file) {
-			$link_address = 'finished/'.$file;
-			echo "<tr><td><a href='".$link_address."'>$file</a></td>";
-			echo "<td><a href='?delete=1'>Delete Now!</a></td></tr>";
-
-			$x = $_SERVER['DOCUMENT_ROOT']."/worker/finished/". $file ;
-			echo $x;
-			if(isset($_GET['delete'])) {
-			
-				unlink($x);			
-			}
-
-			//echo "<a href=getcwd().'/finished/'.$file>link</a>";
-			
-			
+						$x = $_SERVER['DOCUMENT_ROOT']."/worker/finished/". $file;
+						
+						if(isset($_GET['delete'])) {			
+							unlink($x);			
+						}
+					}
+				}		
+				echo "</table>";				
+			}	
 		}
-		//print_r($files);
-		echo "</table>";
+		
+
+		
 		?>
 		
     </div>

@@ -1,76 +1,77 @@
 #!/bin/bash
 
-# Bash script to execute your task
+# Bash script to execute each individual task
 
-echo "Hello world!"
+echo "Hello world from BashRUN!"
 
+#user name
+task_user=$1
+echo "1 is $task_user"
 
-folder=$2
-echo "$folder"
-echo "after where"
+#task name
+task_name=$2
+echo "2 is $task_name"
 
-url=$3
-echo "$url"
-echo "after url"
+#task id
+task_id=$3
+echo "3 is $task_id"
 
-task=$4
-echo "$task"
-echo "after task"
+#user email address
+email=$4
+echo "4 is $email"
 
-#print number of parameters
-echo "$#"
+#array of commands (comma separated)
+num_of_commands=$5
+echo "5: $num_of_commands"
 
-#declear an array to hold values
-declare -a commandsArray
+commands=$6
+echo "6: $commands"
 
-#put values inside the array
-commandsArray=("$@")
+#change the directory. move to the task directory
+cd /var/www/html/worker/uploads/$task_id
 
-# get length of an array
-tLen=${#commandsArray[@]}
- 
-# use for loop read all nameservers
-for (( i=0; i<${tLen}; i++ ));
-do
-  ${commandsArray[$i]}
+#execute all the commands, one after the other.
+for (( i=1; i<$num_of_commands; i++ ));do
+	command=$(echo $commands| cut -d',' -f $i)
+	$command
 done
 
-chmod 777 /var/www/html/worker/uploads/$folder
-cd /var/www/html/worker/uploads/$folder
 
-for (( i=0; i<${tLen}; i++ ));
-do
-  ${commandsArray[$i]}
-done
 
-#zip -r test.zip $folder
-zip $task.zip *
+#compress the complete task directory
+zip $task_id.zip *
 
-cp $task.zip ../../finished
+#copy the results to the finished tasks directory
+cp $task_id.zip ../../finished
 
-#scp $task.zip -P 5000 ibrahim@127.0.0.1:/home/ibrahim/Desktop/
 
-TO_ADDRESS=$3
+#prepare the email to send it to user
+TO_ADDRESS=$email
 FROM_ADDRESS="work@worker.de"
-SUBJECT="Worker: $task Task finished"
-BODY="Your task $task with id: $folder is finished"
+SUBJECT="Worker: $task_name Task finished"
+BODY="Hello $task_user! Your task $task with id: $folder is finished."
 
-echo "${BODY}" | mail -s "${SUBJECT}" "${TO_ADDRESS}"  # -- -r "${FROM_ADDRESS}"
-
-
-#echo "Your task $task with id: $folder is finished" | mail -s "Worker: $task Task finished" $url
+#send the email to user
+#echo "${BODY}" | mail -s "${SUBJECT}" "${TO_ADDRESS}"  # -- -r "${FROM_ADDRESS}"
 
 
+#search for the task in the file and chage status to FINISHED
 
 
+filename="TasksList.csv"
+while IFS='' read -r task || [[ -n "$task" ]]; do
+	echo "hi"
+	echo ${task//NEWs/FISNISHED} ; 
+done < $filename > TasksList.csv.t ; mv TasksList.csv{.t,}
+
+while IFS='' read -r task || [[ -n "$task" ]]; do
+    echo "hi"
+	echo ${task//NEWs/FISNISHED} ; 
+done < $filename
 
 
-#print number of array elements
-#echo ${commandsArray[0]}
-
-#for arg in "${commandsArray[@]}"; do
-	#$arg
 #done
+echo "done!"
 
 
 

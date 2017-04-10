@@ -1,54 +1,36 @@
 #!/bin/bash
 
-# Bash script search for new tasks and run them
+#Bash script that search for new tasks and run them
+#This bash script will be called periodically from the CRONTAB.
 
-#awk -F "\"*,\"*" '{print $6}' TasksList.csv
-# while read a ; do echo ${a//abc/XYZ}
-#sed '0,/NEW/{s/NEW/YES/}' "$1"
 
-unset n
+#Loop through all the tasks in the file, and find the first NEW task.
+#Start executing the NEW task, chantge its status to RUNNING and when finish this task break.
 while IFS='' read -r task || [[ -n "$task" ]]; do
-	
-	
-	: $[n++]
-	
-	
-	
-	
-	echo $n
+		
+	#Print the task.
 	#echo "$task"
 	
-	
+	#Extract the status of the current task.
 	task_status=$(echo $task| cut -d',' -f 6)
 	#echo $task_status
 	
 	
-	#If status is NEW, change the status and run the task.
+	#If status is NEW, change the status to RUNNING and run the task.
 	if [ $task_status == "NEW" ]; then
-		#Change the status to RUNNING.
 		
+		#Change the status to RUNNING.		
 		#replace the word new with running		
-		#sed -i "0,/\bNEW\b/d" "$1"
-		#sed '0,/NEW/{/NEW/d;}' "$1"
-		###sed -i '0,/NEW/{s/NEW/YES/}' "$1"
-		
-		sed -i '0,/\bNEW\b/{s/\bNEW\b/YES/}' "$1"
-		
-		
-		#sed -i "$n d" "$1"
-		#: $[n++]
-		
-		#echo ${task//NEW/RUNNNIGs} >> "$1"
-		
-		#sed -i "/\bexample\b/d" myfile
-		
+		sed -i '0,/\bNEW\b/{s/\bNEW\b/RUNNING/}' "$1"		
+						
 		#Get all the commands for the task, they are separated with ":".
 		task_commands=$(echo $task| cut -d',' -f 4)
-		#Get numner of commands
+		
+		#Get number of commands
 		#number of ':' is the occurrences
 		number_of_occurrences=$(grep -o ":" <<< $task_commands | wc -l)		
 		let number_of_occurrences=number_of_occurrences+2
-		echo $number_of_occurrences
+		#echo $number_of_occurrences
 		
 		#Prepare an array of all task commands.
 		ARRAY=()
@@ -63,22 +45,26 @@ while IFS='' read -r task || [[ -n "$task" ]]; do
         done
 		
 		#let COUNTER=COUNTER-1
-		echo ${ARRAY[*]}
+		#echo ${ARRAY[*]}
 		
+		#Prepare all the task info to send it to the Bashrun script.
 		task_user=$(echo $task| cut -d',' -f 1)
 		task_id=$(echo $task| cut -d',' -f 3)
 		task_email=$(echo $task| cut -d',' -f 5)
 		task_name=$(echo $task| cut -d',' -f 2)
 		#echo $task_commands
-		echo $task_user
-		echo $task_id
-		echo $task_email
-		echo $task_name
+		#echo $task_user
+		#echo $task_id
+		#echo $task_email
+		#echo $task_name
+		
+		#Call the bashrun scrip and send it all the task info as parameter.
 		./bashrun $task_user $task_name $task_id $task_email $COUNTER "${ARRAY[*]}"
 		
-		#break;
-	else
-		echo "not new"		
+		#Once we run one task, stop. Wait for the CRONTAB to make a new call for this scrip.
+		break
+	#else
+		#echo "not new"		
 	fi
 done < "$1"
 

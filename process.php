@@ -1,76 +1,92 @@
 <?php
+
+//Number of uploaded files.
 $count = 0;
-$target_dir = "uploads/";
+
+//$target_dir = "uploads/";
 
 
 
-
+//If server post request, check the input.
 if ($_SERVER['REQUEST_METHOD'] == 'POST'){
+	//Generate a uniq id, will be used as folder name for the task.
 	$dirname = uniqid("", true);
+	
+	//location to upload files.
 	$new_dir = "/var/www/html/worker/uploads/".$dirname;
 	mkdir($new_dir, 0777);	
+    
+    //Uplad files user selected.
     foreach ($_FILES['files']['name'] as $i => $name) {		
         if (strlen($_FILES['files']['name'][$i]) > 1) {			
-			$target_file = $new_dir ."/". basename($_FILES["files"]["name"][$i]);
-			//echo("<br/>");
-			//echo($target_file);
-			//echo $_FILES["files"]["tmp_name"][$i];
+			$target_file = $new_dir ."/". basename($_FILES["files"]["name"][$i]);			
             if (move_uploaded_file($_FILES["files"]["tmp_name"][$i], $target_file)) {
-                $count++;
-              //  echo ("new");
+                $count++;              
             }
         }
     }
-    // Check the commands input
+    
+    //Check task commands.
     if (empty($_POST["commands"])) {
 		$commands = "";		
-		} else {			
-			//$CommandList = escapeshellarg($_POST["commands"]);
-			$CommandList = $_POST["commands"];
-			$commands = explode("\n", str_replace("\r", "", $CommandList));
-		}
-		array_push($commands, $dirname);
-		
-		
+	} else {			
+		//$CommandList = escapeshellarg($_POST["commands"]);
+		$CommandList = $_POST["commands"];
+		$commands = explode("\n", str_replace("\r", "", $CommandList));
+	}
+	
+	// Add directory name (task_id) to the comands
+	//array_push($commands, $dirname);
+	
+	//Check user email address.
 	if(empty($_POST["useremail"])) {
 		$email = "";
 	} else {
 		//$email = escapeshellarg($_POST["useremail"]);
 		$email = $_POST["useremail"];
+		//Add it to the commands array.
 		array_push($commands, $email);
 	}
 	
+	//Check user name.
+	if(empty($_POST["username"])) {
+		$user_name="";		
+	} else {		
+		$user_name = $_POST["username"];
+		$user_name = str_replace(' ', '_', $user_name);
+		//Add it to the commands array.
+		array_push($commands, $user_name);
+	}
+	
+	//Check task name.
 	if(empty($_POST["taskname"])) {
 		$task_name="";		
 	} else {
 		//$task_name = escapeshellarg($_POST["taskname"]);
 		$task_name = $_POST["taskname"];
 		$task_name = str_replace(' ', '_', $task_name);
-
+		//Add it to the commands array.
 		array_push($commands, $task_name);
 	}
 	
-	// open the file "demosaved.csv" for writing
+	// open the file "TasksList.csv" for writing.
 	$file = fopen('TasksList.csv', 'a');
  
 	 
-	// Sample data. This can be fetched from mysql too
-	$username = "Ali";
-	//$CommandList = str_replace("\r", ":", $CommandList);
+	//Separate commands with ":".
 	$CommandList = trim(preg_replace('/\s\s+/', ':', $CommandList));
 	
-	$data = array($username, $task_name, $dirname, $CommandList, $email, 'NEW');
-	fputcsv($file, $data);
+	//Prepare data that has to be written in the CSV file.
+	$data = array($user_name, $task_name, $dirname, $CommandList, $email, 'NEW');
 	
-	// save each row of the data
-	//foreach ($data as $row) {
-		//fputcsv($file, $data);
-	//}
- 
-	// Close the file
+	//Place data in file.
+	fputcsv($file, $data); 
+	
+	// Close the file.
 	fclose($file);
 
 	/*
+	 * Old way of doing it; call shell_exec to execute the task directly.
 	$where = "uploads";
 	echo("<br/>testing<br/>");
 	echo "Your j";
@@ -82,6 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 	print_r($result);
 	*/
 
+	//Inform user his task id.
 	echo "Your job id is: ".$dirname;
 }
 
@@ -89,13 +106,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 
 
 
-// Function that check the data entered by the user.
-function test_input($data) {
-  $data = trim($data);
-  $data = stripslashes($data);
-  $data = htmlspecialchars($data);
-  return $data;
-}
+
 ?>
 <!--
 <!DOCTYPE html>

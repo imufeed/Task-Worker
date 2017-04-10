@@ -165,15 +165,13 @@
       <p>Fill the following form with the details of your task</p>      
         
         <form action="process.php" method="POST" enctype="multipart/form-data">
+			<label for="username">User name</label> <input type="text" name="username" required="required" id="username" class="form-control" /> <br/>
 			<label for="taskname">Task name</label> <input type="text" name="taskname" required="required" id="taskname" class="form-control" /> <br/>
 			<label for="useremail">Email address</label> <input type="text" name="useremail" id="useremail" required="required" class="form-control" /> <br/>
 			<label for="commands">Commands</label> <textarea name="commands" id="commands" required="required" class="form-control" rows="5"></textarea> <br/>
-			<label for="files"> Input directory </label> <input type="file" name="files[]" id="files" multiple="" directory="" webkitdirectory="" mozdirectory="" class="form-control" /> <br/>
-			<!--Output directory:<input type="file" webkitdirectory directory multiple class="form-control" /> <br/>!-->
-			<!--<input type="file" id="flup" onchange="getfolder(event)" webkitdirectory mozdirectory msdirectory odirectory directory multiple />!-->          
-					
+			<label for="files"> Input directory </label> <input type="file" name="files[]" id="files" multiple="" directory="" webkitdirectory="" mozdirectory="" class="form-control" /> <br/>					
 
-           <input type="submit" value="Submit Task" class="btn btn-info" />
+			<input type="submit" value="Submit Task" class="btn btn-info" />
         </form>
         
         <hr>

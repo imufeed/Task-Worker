@@ -1,6 +1,6 @@
 {
-  "task_name": "test job",
-  "commands": ["python work_task.py", "ls /var"],
-  "files_in": ["work_task.py", "test.ps"],    
-  "user_url": "http://127.0.0.1:5000"
+	"user_name": "Ibrahim Mahmoud",
+	"task_name": "test job",
+	"email_address": "ibrahim.just@gmail.com",
+	"commands": ["python work_task.py", "ls /var", "man cp"]  
 }

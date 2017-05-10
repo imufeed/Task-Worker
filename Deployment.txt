@@ -1,0 +1,23 @@
+Documentation of deployment process
+1. Compress the worker to worker.tar on local machine.
+2. Copy compressed file to server under user directory:
+scp.exe -P 888 worker.tar imahmoud@141.51.118.241:
+3. ssh to server.
+4. extract files to worker/
+tar -xf worker.tar
+5. Copy files to web: /var/www/html
+6. Change the owner to apache
+sudo chown -R apache:apache /var/www/html/worker/
+7. Change mode to 775
+sudo chmod 775 -R worker/
+8. Update crontab for apache user
+sudo crontab -u apache -e
+9. Add the following lines
+* * * * * /var/www/html/worker/crontask.sh /var/www/html/worker/TasksList.csv #This will run crontask.sh every minute.
+* 15 * * * find /var/www/html/worker/uploads -type d -mtime +30 -exec rm -R {} + #This will delete directories under /uploads every 30 days.
+* 15 * * * find /var/www/html/worker/finished -type f -mtime +30 -exec rm -R {} + #This will delete files under /finished every 30 days.
+10. Edit php.ini to increase maximum size of uploaded files
+sudo nano /etc/php.ini
+11. Restart apache
+sudo /etc/init.d/httpd stop
+sudo /etc/init.d/httpd start

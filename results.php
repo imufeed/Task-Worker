@@ -68,16 +68,45 @@
 				$files = scandir($dir);
 				$files = array_diff($files, array('.', '..'));
 				echo "<table>";
-				$id = $id.".zip";
+				$id_zip = $id.".zip";
+				$found = false;
 				//search for the task in the "finished" directory.	
 				foreach($files as $file) {										
-					if($file == $id) {
+					if($file == $id_zip) {
+						$found = true;
 						$link_address = 'finished/'.$file;
 						echo "<tr><td><a href='".$link_address."'>$file</a></td>";						
 						echo "<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td><td><a href='?delete=1&file=".$file."'>Delete Now!</a></td></tr>";					
 					}
-				}		
-				echo "</table>";				
+				}
+				//if task id is not found in the finished directory, check its status in the TasksList.csv file.
+				$row = 1;
+				$found_in_csv = false;
+				if (!$found && ($handle = fopen("TasksList.csv", "r")) !== FALSE) {
+					while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+						$num = count($data);
+						//echo "<p> $num fields in line $row: <br /></p>\n";
+						$row++;
+						if($data[2] == $id){
+							$found_in_csv = true;
+							if($data[5] == "NEW"){
+								echo "<p>Status of your job is <strong>NEW</strong>, please wait until it gets executed by the worker!<br /></p>\n";
+							}else if($data[5] == "RUNNING"){
+								echo "<p>Status of your job is <strong>RUNNING</strong>, please wait until the worker finish executing!<br /></p>\n";
+							}else if($data[5] == "FINISHED"){
+								echo "<p><strong>Error: </strong>There seems to be a problem executing your job, please contact your system administrator for help!<br /></p>\n";
+								//echo "<li>Maximum number of files must not exceed 20 files.</li>";
+								echo "<li>File must be in <strong>.zip</strong> format.</li>";
+								echo "<li>Maximum size of uploaded file must not exceed <strong>300MB</strong>strong>.</li>";
+							}							
+						}
+					}
+					if(!$found_in_csv) {
+						echo "<p><strong>Error: </strong>Worker can not find a job with this id, contact your system administrator for help!<br /></p>\n";
+					}
+					fclose($handle);
+				}
+				echo "</table>";
 			}	
 		}
 		

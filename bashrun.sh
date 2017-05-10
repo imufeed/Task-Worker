@@ -34,6 +34,12 @@ commands=$(sed -e 's/^"//' -e 's/"$//' <<<"$commands")
 #Change the directory. move to the task directory
 cd /var/www/html/worker/uploads/$task_id
 
+#Unzip the compressed file
+unzip `ls *.zip`
+
+#Chage directory inside the newly generated folder
+cd `ls -d -- */`
+
 #Execute all the commands, one after the other.
 for (( i=1; i<$num_of_commands; i++ ));do
 	command=$(echo $commands| cut -d',' -f $i)

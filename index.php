@@ -47,32 +47,38 @@
     </div>
     <div class="col-sm-8 text-left"> 
       <h1>Welcome to Worker</h1>
-      <p>Using this webpage you will be able to run your simulation on the server and get the results back to your machine. You can fill the form below or upload a JSON file that contains the details of your task.</p>
-      <hr>
-      <h2>Task information</h2>
+      <p>Using this webpage you will be able to run your simulation on the server and get the results back to your machine. You can fill the form below or upload a JSON file that contains the details of your task. Please note that:
+		<!--<li>Maximum number of files must not exceed 20 files.</li>-->
+		<li>File must be in <strong>.zip</strong> format.</li>
+		<li>Maximum size of uploaded file must not exceed <strong>300MB </strong>.</li>
+      </p>
+      <hr>    
+        
+        
+        <h2>Using JSON file</h2>
+        
+        <form action="processjson.php" method="POST" enctype="multipart/form-data">
+			<label for="jsonfile"> Select JSON file </label><input type="file" name="jsonfile" required="required" id="jsonfile"/><br/>
+			<label for="fileFromJson"> Zipped file </label><input type="file" name="fileFromJson" id="fileFromJson"class="form-control" /> <br/>
+			<!--<label for="files"> Input directory </label> <input type="file" name="files[]" required="required" id="files" multiple="" directory="" webkitdirectory="" mozdirectory="" class="form-control" /> <br/>-->
+        <input type="submit" value="Submit JSON" class="btn btn-info" /><br/>    
+        </form>
+        <hr>
+        <h2>Using web form</h2>
       <p>Fill the following form with the details of your task</p>      
         
         <form action="process.php" method="POST" enctype="multipart/form-data">
 			<label for="username">User name</label> <input type="text" name="username" required="required" id="username" class="form-control" /> <br/>
 			<label for="taskname">Task name</label> <input type="text" name="taskname" required="required" id="taskname" class="form-control" /> <br/>
-			<label for="useremail">Email address</label> <input type="text" name="useremail" id="useremail" required="required" class="form-control" /> <br/>
+			<label for="useremail">Email address</label> <input type="email" name="useremail" id="useremail" required="required" class="form-control" /> <br/>
 			<label for="commands">Commands</label> <textarea name="commands" id="commands" required="required" class="form-control" rows="5"></textarea> <br/>
-			<label for="files"> Input directory </label> <input type="file" name="files[]" id="files" multiple="" directory="" webkitdirectory="" mozdirectory="" class="form-control" /> <br/>
+			<label for="file"> Zipped file </label><input type="file" name="fileToUpload" id="fileToUpload"class="form-control" /> <br/>
+			<!--<label for="files"> Input directory </label> <input type="file" name="files[]" id="files" multiple="" directory="" webkitdirectory="" mozdirectory="" class="form-control" /> <br/>-->
 
 			<input type="submit" value="Submit Task" class="btn btn-info" />
         </form>
         
         <br/>
-        
-        <hr>
-        <h2>Using JSON file</h2>
-        
-        <form action="processjson.php" method="POST" enctype="multipart/form-data">
-			<label for="jsonfile"> Select JSON file </label><input type="file" name="jsonfile" id="jsonfile"/><br/>
-			<label for="files"> Input directory </label> <input type="file" name="files[]" id="files" multiple="" directory="" webkitdirectory="" mozdirectory="" class="form-control" /> <br/>
-        <input type="submit" value="Submit JSON" class="btn btn-info" />
-    <br/>    
-        </form>
         
     </div>
     

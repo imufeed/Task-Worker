@@ -16,6 +16,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 	$new_dir = "/var/www/html/worker/uploads/".$dirname;
 	mkdir($new_dir, 0777);	
     
+    //Upload single Zip file
+    $target_file = $new_dir ."/". basename($_FILES["fileToUpload"]["name"]);    
+    if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
+		$count++;
+	}
+    /*
     //Upload files user selected.
     foreach ($_FILES['files']['name'] as $i => $name) {		
         if (strlen($_FILES['files']['name'][$i]) > 1) {			
@@ -25,6 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
             }
         }
     }
+    */
     
     //Check task commands.
     if (empty($_POST["commands"])) {
@@ -161,6 +168,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
       <hr>
       <h2>Task information</h2>
       <p>Your task id is: <?php echo $dirname;?></p>
+      <p>Please note that your files will be automatically <strong>deleted after 30 days.</strong></p>
     </div>
     
     

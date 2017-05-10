@@ -30,7 +30,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
 		print('yes! json');
     */
     
+    //Upload single Zip file
+    $target_file = $new_dir ."/". basename($_FILES["fileFromJson"]["name"]);    
+    if (move_uploaded_file($_FILES["fileFromJson"]["tmp_name"], $target_file)) {
+		$count++;
+	}
     
+    /*
     //Uplad files user selected.
     foreach ($_FILES['files']['name'] as $i => $name) {		
         if (strlen($_FILES['files']['name'][$i]) > 1) {			
@@ -40,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
             }
         }
     }
-       
+    */ 
 
 	//prepare the data to be written on the CSV file.	
 	$user_name = $json["user_name"];	
@@ -136,6 +142,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST'){
       <hr>
       <h2>Task information</h2>
       <p>Your task id is: <?php echo $dirname;?></p>
+      <p>Please note that your files will be automatically <strong>deleted after 30 days.</strong></p>
     </div>
     
     

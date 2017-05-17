@@ -50,7 +50,7 @@ done
 
 
 #Compress the complete task directory
-zip $task_id.zip *
+zip -r $task_id.zip *
 
 #Copy the results to the finished tasks directory
 cp $task_id.zip /var/www/html/worker/finished
